@@ -12,17 +12,17 @@ import { formatPrice } from '../../util/format';
 
 import { Container, ProductTable, Total, Info } from './styles';
 
-function Cart({ cart, total, dispatch, removeFromCart, updateAmount }) {
+function Cart({ cart, total, dispatch, removeFromCart, updateAmountRequest }) {
   function handleDeleteItem(id) {
     removeFromCart(id);
   }
 
   function increment(product) {
-    updateAmount(product.id, product.amount + 1);
+    updateAmountRequest(product.id, product.amount + 1);
   }
 
   function decrement(product) {
-    updateAmount(product.id, product.amount - 1);
+    updateAmountRequest(product.id, product.amount - 1);
   }
 
   return (
@@ -90,16 +90,18 @@ function Cart({ cart, total, dispatch, removeFromCart, updateAmount }) {
       {cart.length === 0 && (
         <Info>
           Seu carrinho está vázio!!
-          <span>Adicione produtos clicando no botão “Adicionar ao carrinho" na página de produtos.</span>
+          <span>
+            Adicione produtos clicando no botão “Adicionar ao carrinho" na
+            página de produtos.
+          </span>
         </Info>
       )}
-     
     </Container>
   );
 }
 
-const mapStateToProps = state => ({
-  cart: state.cart.map(product => ({
+const mapStateToProps = (state) => ({
+  cart: state.cart.map((product) => ({
     ...product,
     subtotal: formatPrice(product.price * product.amount),
   })),
@@ -110,7 +112,7 @@ const mapStateToProps = state => ({
   ),
 });
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators(CartActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);
